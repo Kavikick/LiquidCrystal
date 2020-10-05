@@ -168,7 +168,38 @@ unittest(setCursor_high) {
 unittest(home_high) {
   // create lcd object
   LiquidCrystal_Test lcd(rs, enable, d4, d5, d6, d7);
-  // TODO
+  lcd.begin(16, 2);
+
+  // Go home
+  lcd.home();
+  // Check Cursor is at upper-left
+  assertEqual(0, lcd.getCursorCol());
+  assertEqual(0, lcd.getCursorRow());
+
+  // Set Cursor to new location
+  lcd.setCursor(3, 1);
+  // Check Cursor Location
+  assertEqual(3, lcd.getCursorCol());
+  assertEqual(1, lcd.getCursorRow());
+
+  // Return Home
+  lcd.home();
+  // Check Cursor is at upper-left
+  assertEqual(0, lcd.getCursorCol());
+  assertEqual(0, lcd.getCursorRow());
+
+  /* When print works
+  // Print message
+  lcd.print("Test line");
+  //Check Cursor Location
+  assertNotEqual(0, getCursorCol());;
+
+  // Return Home
+  lcd.home();
+  // Check Cursor is at upper-left
+  assertEqual(0, lcd.getCursorCol());
+  assertEqual(0, lcd.getCursorRow());
+  */
 }
 
 unittest(display_high) {
@@ -197,29 +228,33 @@ unittest(blink_high) {
   bool blinking = lcd.isBlink();
 
   // check default - noBlink
-  assertEqual(0, blinking);
+  assertFalse(blinking);
 
   // check blink function
   lcd.blink();
   blinking = lcd.isBlink();
-  assertEqual(1, blinking);
+  assertTrue(blinking);
 
   // check noBlink function
   lcd.noBlink();
   blinking = lcd.isBlink();
-  assertEqual(0, blinking);
+  assertFalse(blinking);
 }
 
 unittest(cursor_high) {
   // create lcd object
   LiquidCrystal_Test lcd(rs, enable, d4, d5, d6, d7);
-  // TODO
-}
 
-unittest(noCursor_high) {
-  // create lcd object
-  LiquidCrystal_Test lcd(rs, enable, d4, d5, d6, d7);
-  // TODO
+  // assert startup no cursor is set
+  assertEqual(false, lcd.isCursor());
+
+  // check cursor function
+  lcd.cursor();
+  assertEqual(true, lcd.isCursor());
+
+  // check noCursor function
+  lcd.noCursor();
+  assertEqual(false, lcd.isCursor());
 }
 
 unittest_main()
