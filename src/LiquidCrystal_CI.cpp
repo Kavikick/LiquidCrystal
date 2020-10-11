@@ -153,6 +153,24 @@ void LiquidCrystal_CI::createChar(uint8_t location, uint8_t charmap[]) {
 }
 
 inline size_t LiquidCrystal_CI::write(uint8_t value) {
+
+  std::string line = _lines.at(_row);
+  int end = _autoscroll ? (_col - 1) : _col;
+  while (line.length() <= end) {
+    line += ' ';
+  }
+
+  if (_autoscroll) {
+    for (int i = 0; i < (_col - 1); i++) {
+      line.at(i) = line.at(i + 1);
+    }
+    --_col;
+  }
+
+  line.at(_col) = value;
+  ++_col;
+
+  _lines.at(_row) = line;
   return LiquidCrystal_Base::write(value);
 }
 
